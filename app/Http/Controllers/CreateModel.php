@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Config;
 
 class CreateModel extends Controller
 {
@@ -44,9 +45,16 @@ class CreateModel extends Controller
             $model = self::model($value, $key);
             $controller = self::controller($set, $key);
             $req = self::req($set, $key);
+            $form = self::form($set, $key);
+            $index = self::index($set, $key);
+            $js = self::js($set, $key);
+
             dump($model);
             dump($controller);
             dump($req);
+            dump($form);
+            dump($index);
+            dd($js);
         }
     }
 
@@ -77,6 +85,51 @@ class CreateModel extends Controller
         $modelFile = $path . $table . 'Request.php';
         if (file_put_contents($modelFile, $content) !== false) {
             return ['success' => "requests (" . basename($modelFile) . ")"];
+        }
+    }
+
+    public static function form($set, $table)
+    {
+        $content = view('_form_template', ['set' => $set, 'table' => $table]);
+        $convert = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $table));
+        $path = Config::get('view.paths');
+        $newPath = $path[0].'/tetapan'.'/'.$convert;
+        if (!file_exists($newPath)) {
+            mkdir($newPath, 0777, true);
+            $modelFile = $newPath."/". "_form_" . $convert . '.blade.php';
+            if (file_put_contents($modelFile, $content) !== false) {
+                return ['success' => "form (" . basename($modelFile) . ")"];
+            }   
+        }
+    }
+
+    public static function index($set, $table)
+    {
+        $content = view('_index_template', ['set' => $set, 'table' => $table]);
+        $convert = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $table));
+        $path = Config::get('view.paths');
+        $newPath = $path[0].'/tetapan'.'/'.$convert;
+        if (file_exists($newPath)) {
+            $modelFile = $newPath."/". 'index.blade.php';
+            if (file_put_contents($modelFile, $content) !== false) {
+                return ['success' => "index (" . basename($modelFile) . ")"];
+            }   
+        }
+    }
+
+    public static function js($column, $table)
+    {
+        $set = array_diff($column, ['Papar'] );
+        $content = view('_js_template', ['set' => $set, 'table' => $table]);
+        $convert = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $table));
+        $path = Config::get('view.paths');
+        $newPath = $path[0]."/tetapan/js";
+
+        if (file_exists($newPath)) {
+            $modelFile = $newPath."/". substr($convert, 4) .'.js';
+            if (file_put_contents($modelFile, $content) !== false) {
+                return ['success' => "js (" . basename($modelFile) . ")"];
+            }   
         }
     }
 }

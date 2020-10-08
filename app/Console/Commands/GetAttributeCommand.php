@@ -39,7 +39,7 @@ class GetAttributeCommand extends Command
      */
     public function handle()
     {
-        $getTables = DB::select('SELECT * FROM INFORMATION_SCHEMA.TABLES');
+        $getTables = DB::select("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'Ref%'");
         $tables = [];
         foreach ($getTables as $key => $value) {
             $tables[] = $value->TABLE_NAME;
