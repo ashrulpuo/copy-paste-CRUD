@@ -2,16 +2,14 @@
 "
 <?php
 
-namespace App\Http\Controllers\\tetapan;
+namespace App\Http\Controllers\\Tetapan;
 
 use App\Http\Controllers\Controller;
 use App\\$table;
 use Illuminate\Http\Request;
-use DB;
-use Illuminate\Support\Str;
-use App\Http\Requests\\". $table ."Request;
-use DataTables;
+use App\Http\Requests\Tetapan\\". $table ."Requests;
 use Illuminate\Pagination\Paginator;
+use DB;
 
 class ". $table ."Controller extends Controller
 {
@@ -19,7 +17,13 @@ class ". $table ."Controller extends Controller
 "?>
 <?php
     foreach ($set as $i => $column) { 
-        echo "\n\t\t'" . $column . "',";
+        if($column != $table.'Id'){
+            if($column != 'DaftarPada'){
+                if($column != 'Papar'){
+                    echo "\n\t\t'" . $column . "',";
+                }
+            }
+        }
     } 
 ?>
 <?="
@@ -60,7 +64,7 @@ class ". $table ."Controller extends Controller
             return response()->json(\$response, 200);
         }
 
-        return view('tetapan.". strtolower(substr($table, 3)) .".index');
+        return view('tetapan.". strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $table)) .".index');
     }
 
 
@@ -70,7 +74,7 @@ class ". $table ."Controller extends Controller
      * @param  \Illuminate\Http\Request  \$request
      * @return \Illuminate\Http\Response
      */
-    public function store(". $table ."Request \$request)
+    public function store(". $table ."Requests \$request)
     {
         \$input = \$request->all();
 "?>
@@ -124,7 +128,7 @@ class ". $table ."Controller extends Controller
      * @param  int  \$id
      * @return \Illuminate\Http\Response
      */
-    public function update(". $table ."Request \$request, \$id)
+    public function update(". $table ."Requests \$request, \$id)
     {
         \$input = \$request->all();
         "?>

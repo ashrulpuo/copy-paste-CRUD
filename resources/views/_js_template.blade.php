@@ -14,6 +14,7 @@ var ". strtolower(substr($table, 3)) ."DT = table.DataTable({
     scrollCollapse: true,
     pagingType: 'full_numbers',
     ordering: false,
+    responsive: true,
     ajax: {
         url: table.data('route'),
         method: 'GET',
@@ -38,7 +39,7 @@ var ". strtolower(substr($table, 3)) ."DT = table.DataTable({
                 echo "\n\t\t{
             data: '" . $column . "',
             render: function(row) {
-                return moment(row.DaftarPada).format('DD/MM/YYYY');
+                return moment(row).format('DD/MM/YYYY');
             },
         },";
             }
@@ -83,6 +84,7 @@ foreach ($set as $i => $column) {
 
 $('body').on('click', '.create', function() {
     $('#tetapan" .substr($table, 3). "')[0].reset();
+    $('#modelHeading').html(\"Tetapan ".preg_replace('/([a-z])([A-Z])/s','$1 $2', substr($table, 3))."\" );
 
     $('.modal').modal();
 });
@@ -100,12 +102,11 @@ $('#simpan').click(function(e) {
         method = \"POST\";
     } else {
         url = table.data('route') + '/' + id;
-        console.log(url)
         method = \"PUT\";
     }
 
     $.ajax({
-        data: $('#".substr($table, 3)."').serialize(),
+        data: $('#tetapan".substr($table, 3)."').serialize(),
         url: url,
         type: method,
         dataType: 'json',
@@ -133,15 +134,15 @@ $('body').on('click', '.edit', function() {
 "?>
 <?php
 foreach ($set as $i => $column) { 
-    echo "\t\t$('#". $column ."').val(data.". strtolower(substr($table, 3)) .".". $column .");"."\r\n";
-    if($column == $table.'Id'){
-        echo "\t\t$(\"#Papar\").prop(\"checked\", (data.".strtolower(substr($table, 3)).".Papar === 1) ? true : false);"."\r\n";
+    echo "\t\t$('#". $column ."').val(data.data.". $column .");"."\r\n";
+    if($column == 'Papar'){
+        echo "\t\t$(\"#Papar\").prop(\"checked\", (data.data.Papar === 1) ? true : false);"."\r\n";
     }
 }   
 ?>
 <?="    
-        $('#modelHeading').html(\"Kemaskini " .substr($table, 3)."\");
-        $('#simpan').html('Kemaskini');
+        $('#modelHeading').html(\"Kemaskini\");
+        $('#simpan').html(\"Kemaskini\" );
         $('.modal').modal();
     })
 });

@@ -3,17 +3,15 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Http\Controllers\CreateModel;
-use DB;
 
-class GetAttributeCommand extends Command
+class haha extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'attr';
+    protected $signature = 'command:name';
 
     /**
      * The console command description.
@@ -39,12 +37,6 @@ class GetAttributeCommand extends Command
      */
     public function handle()
     {
-        $getTables = DB::select("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'Ref%'");
-        $tables = [];
-        foreach ($getTables as $key => $value) {
-            $tables[] = $value->TABLE_NAME;
-        }
-        CreateModel::web($tables);
-        CreateModel::GetColumns($tables);
+        return 0;
     }
 }

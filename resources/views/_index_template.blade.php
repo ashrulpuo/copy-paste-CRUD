@@ -50,11 +50,14 @@
 "?>
 <?php
     foreach ($set as $i => $column) {
-      echo "\t\t\t\t\t\t\t<th>".$column."</th>\r\n";
+        if ($column != $table.'Id') {
+            if ($column != 'Papar') {
+                echo "\t\t\t\t\t\t\t<th>".$column."</th>\r\n";
+            }
+        }
     } 
 ?>
-<?="
-                            <th>Action</th>
+<?="                        <th>Action</th>
                         </tr>
                     </thead>
                 </table>
@@ -67,14 +70,14 @@
 </div>
 
 <x-modal title=\"Custom Title\" id=\"modal\">
-    @include('tetapan.agama._form')
+    @include('tetapan.".strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $table))."._form_".strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $table))."')
 </x-modal>
 @endsection
 
 @section('scripts')
 <script src=\"{{ asset('plugins/custom/datatables/datatables.bundle.js?v=7.0.8')}}\"></script>
 <script type=\"text/javascript\" src=\"{{ asset('/js/app.js') }}\"></script>
-<script src=\"{{ asset('spr/js/tetapan/". strtolower(substr($table, 3)) .".js') }}\"></script>
+<script src=\"{{ asset('spr/js/tetapan/". strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', substr($table, 3))) .".js') }}\"></script>
 @endsection                           
 "
 ?>

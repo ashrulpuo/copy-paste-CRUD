@@ -6,7 +6,7 @@ namespace App\Http\Requests\Tetapan;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ". $table ." extends FormRequest
+class ". $table.'Requests' ." extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,10 +31,12 @@ class ". $table ." extends FormRequest
 <?php
     foreach ($set as $i => $column) {
         if($column != 'DaftarPada'){
-            if($column == "Papar"){
+            if ($column != $table.'Id') {
+                if($column == "Papar"){
                 echo "\n\t\t\t'$column' => '',";
             }else{
-                echo "\n\t\t\t'$column' => !empty(\$this->".$table.'Id'.") ? 'required|unique:$table,$column,' . \$this->".$table.'Id'." . ',$column' : 'required|unique:$table,$column',";
+                echo "\n\t\t\t'$column' => !empty(\$this->".$table.'Id'.") ? 'required|unique:$table,$column,' . \$this->".$table.'Id'." . ',".$table.'Id'."' : 'required|unique:$table,$column',";
+            }
             }
         }
     } 

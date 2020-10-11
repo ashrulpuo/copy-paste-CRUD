@@ -54,15 +54,16 @@ class CreateModel extends Controller
             dump($req);
             dump($form);
             dump($index);
-            dd($js);
+            dump($js);
         }
     }
 
     public static function model($set, $table)
     {
         $content = view('_model_template', ['set' => $set, 'table' => $table]);
-        $path = app_path().'/Models';
-        $modelFile = $path . $table . '.php';
+        $path = "/Users/pocketdata/Desktop/docker-webstack/projects/"."spr/src/app/";
+        $modelFile = $path ."/". $table . '.php';
+        // dd($path);
         if (file_put_contents($modelFile, $content) !== false) {
             return ['success' => "Model created (" . basename($modelFile) . ")"];
         }
@@ -71,20 +72,24 @@ class CreateModel extends Controller
     public static function controller($set, $table)
     {
         $content = view('_controller_template', ['set' => $set, 'table' => $table]);
-        $path = app_path(). "/Http/Controllers/tetapan";
-        $modelFile = $path . $table . 'Controller.php';
-        if (file_put_contents($modelFile, $content) !== false) {
-            return ['success' => "Controller (" . basename($modelFile) . ")"];
-        }
+        $path = "/Users/pocketdata/Desktop/docker-webstack/projects/"."spr/src/app/Http/Controllers/tetapan";
+        $modelFile = $path ."/". $table . 'Controller.php';
+        // if (!file_exists($modelFile)){
+            if (file_put_contents($modelFile, $content) !== false) {
+                return ['success' => "Controller (" . basename($modelFile) . ")"];
+            }    
+        // }
     }
 
     public static function req($set, $table)
     {
         $content = view('_request_template', ['set' => $set, 'table' => $table]);
-        $path = app_path(). "/Http/Requests/Tetapan";
-        $modelFile = $path . $table . 'Request.php';
-        if (file_put_contents($modelFile, $content) !== false) {
-            return ['success' => "requests (" . basename($modelFile) . ")"];
+        $path = "/Users/pocketdata/Desktop/docker-webstack/projects/"."spr/src/app/Http/Requests/Tetapan";
+        $modelFile = $path ."/". $table . 'Requests.php';
+        if (!file_exists($modelFile)){
+            if (file_put_contents($modelFile, $content) !== false) {
+                return ['success' => "requests (" . basename($modelFile) . ")"];
+            }
         }
     }
 
@@ -92,8 +97,9 @@ class CreateModel extends Controller
     {
         $content = view('_form_template', ['set' => $set, 'table' => $table]);
         $convert = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $table));
-        $path = Config::get('view.paths');
-        $newPath = $path[0].'/tetapan'.'/'.$convert;
+        // $path = Config::get('view.paths');
+        $path = "/Users/pocketdata/Desktop/docker-webstack/projects/"."spr/src/resources/views/tetapan";
+        $newPath = $path.'/'.$convert;
         if (!file_exists($newPath)) {
             mkdir($newPath, 0777, true);
             $modelFile = $newPath."/". "_form_" . $convert . '.blade.php';
@@ -107,13 +113,17 @@ class CreateModel extends Controller
     {
         $content = view('_index_template', ['set' => $set, 'table' => $table]);
         $convert = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $table));
-        $path = Config::get('view.paths');
-        $newPath = $path[0].'/tetapan'.'/'.$convert;
+        // $path = Config::get('view.paths');
+        // $newPath = $path[0].'/tetapan'.'/'.$convert;
+        $path = "/Users/pocketdata/Desktop/docker-webstack/projects/"."spr/src/resources/views/tetapan";
+        $newPath = $path.'/'.$convert;
         if (file_exists($newPath)) {
             $modelFile = $newPath."/". 'index.blade.php';
-            if (file_put_contents($modelFile, $content) !== false) {
-                return ['success' => "index (" . basename($modelFile) . ")"];
-            }   
+            if (!file_exists($modelFile)){
+                if (file_put_contents($modelFile, $content) !== false) {
+                    return ['success' => "index (" . basename($modelFile) . ")"];
+                }   
+            }
         }
     }
 
@@ -122,13 +132,29 @@ class CreateModel extends Controller
         $set = array_diff($column, ['Papar'] );
         $content = view('_js_template', ['set' => $set, 'table' => $table]);
         $convert = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $table));
-        $path = Config::get('view.paths');
-        $newPath = $path[0]."/tetapan/js";
+        // $path = Config::get('view.paths');
+        // $newPath = $path[0]."/tetapan/js";
+        $path = "/Users/pocketdata/Desktop/docker-webstack/projects/"."spr/src/resources/spr/js/tetapan";
+        // $newPath = $path.'/'.$convert;
+        if (file_exists($path)) {
+            $modelFile = $path."/". substr($convert, 4) .'.js';
+            if (!file_exists($modelFile)){
+                if (file_put_contents($modelFile, $content) !== false) {
+                    return ['success' => "js (" . basename($modelFile) . ")"];
+                }
+            }
+        }
+    }
 
+    public static function web($tables)
+    {
+        $content = view('_web_template', ['tables' => $tables]);
+        $path = Config::get('view.paths');
+        $newPath = $path[0]."/route";
         if (file_exists($newPath)) {
-            $modelFile = $newPath."/". substr($convert, 4) .'.js';
+            $modelFile = $newPath."/". "web.php";
             if (file_put_contents($modelFile, $content) !== false) {
-                return ['success' => "js (" . basename($modelFile) . ")"];
+                return ['success' => "web (" . basename($modelFile) . ")"];
             }   
         }
     }
